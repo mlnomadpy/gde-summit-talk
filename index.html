@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rethinking Safe Interpretable AI from First-Principles</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <div id="progress"></div>
+  <div id="counter"></div>
+  <nav id="nav">
+    <button id="prev" aria-label="Previous">&larr;</button>
+    <button id="next" aria-label="Next">&rarr;</button>
+  </nav>
+
+  <main id="deck">
+
+    <!-- 1 · TITLE -->
+    <section class="slide" data-theme="dark">
+      <canvas id="viz-orbits" class="slide-canvas"></canvas>
+      <div class="content title-slide">
+        <span class="eyebrow">GDE Summit · Google Cloud Next 2026</span>
+        <h1>Rethinking Safe<br>Interpretable AI</h1>
+        <h2 class="subtitle"><em>from First-Principles</em></h2>
+        <div class="author">
+          <strong>Taha Bouhsine</strong><br>
+          <span class="muted">Google Developer Expert, AI/ML · CEO & Research Scientist, Azetta.ai</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · ABOUT ME -->
+    <section class="slide" data-theme="dark">
+      <div class="content about-slide">
+        <div class="about-top">
+          <img src="img/taha.jpeg" alt="Taha Bouhsine" class="about-photo">
+          <div class="about-intro">
+            <span class="eyebrow" style="margin-bottom:.6rem;">About me</span>
+            <h2 style="margin-bottom:.3rem;">Taha Bouhsine</h2>
+            <p class="about-tagline">Building the mathematical foundations for interpretable AI</p>
+          </div>
+        </div>
+        <div class="about-grid">
+          <div class="about-card">
+            <div class="about-card-icon" style="color:var(--teal);">GDE</div>
+            <div>
+              <h4>Google Developer Expert</h4>
+              <p>AI/ML — JAX & Flax</p>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon" style="color:var(--amber);">CEO</div>
+            <div>
+              <h4>Azetta.ai</h4>
+              <p>Research Scientist — theoretical learning models based in math & physics</p>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon" style="color:var(--purple);">ⵟ</div>
+            <div>
+              <h4>Research</h4>
+              <p>Kernel theory, RKHS, geometric interpretability, white-box deep learning</p>
+            </div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon" style="color:var(--fg-dim);">∞</div>
+            <div>
+              <h4>MLNomads</h4>
+              <p>Founder — collaborative ML research community</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · AETHER: THE BELIEF -->
+    <section class="slide" data-theme="dark">
+      <canvas id="viz-aether-waves" class="slide-canvas"></canvas>
+      <div class="content center">
+        <span class="eyebrow muted">A lesson from physics</span>
+        <h2>The Luminiferous <em>Aether</em></h2>
+        <div class="portrait-row" style="justify-content:center;margin:1rem 0;">
+          <div class="portrait">
+            <img src="img/aristotle.jpg" alt="Aristotle">
+            <span>Aristotle</span>
+          </div>
+          <div class="portrait">
+            <img src="img/huygens.jpg" alt="Christiaan Huygens">
+            <span>C. Huygens</span>
+          </div>
+        </div>
+        <p class="lead">Sound needs air. Ocean waves need water.<br>So light must need… <em>something</em>.</p>
+        <p>In 1690, Christiaan Huygens formalized the aether as the medium for light waves. For over a century after, every equation in optics assumed it. Every physicist believed it.</p>
+        <p class="small muted" style="margin-top:1rem;">Never observed. Never measured. But it <strong>had</strong> to exist — because the math didn't work without it.</p>
+      </div>
+    </section>
+
+    <!-- 4 · AETHER: THE CRACK -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow yellow">1887</span>
+          <h2>Michelson–Morley</h2>
+          <div class="portrait-row">
+            <div class="portrait">
+              <img src="img/michelson.jpg" alt="Albert A. Michelson">
+              <span>A. Michelson</span>
+            </div>
+            <div class="portrait">
+              <img src="img/morley.jpg" alt="Edward W. Morley">
+              <span>E. Morley</span>
+            </div>
+          </div>
+          <p>They built the most precise interferometer ever made. Split a beam in two, sent the halves perpendicular, looked for a speed difference.</p>
+          <p class="lead" style="margin-top:1rem;"><strong>There was no difference.</strong></p>
+          <p class="small muted">The most famous null result in physics.</p>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-mm-result" class="viz"></canvas>
+          <p class="caption">Expected fringe shift vs. observed — null result</p>
+        </div>
+      </div>
+      <div class="footnote">A. A. Michelson, E. W. Morley. <a href="https://doi.org/10.2475/ajs.s3-34.203.333">"On the Relative Motion of the Earth and the Luminiferous Ether"</a>, American Journal of Science, 1887.</div>
+    </section>
+
+    <!-- 5 · AETHER: PATCH vs REMOVE -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow red">The response</span>
+        <h2>Patch or <em>remove?</em></h2>
+        <div class="contrast-row">
+          <div class="contrast-card">
+            <h4>The patches (1887–1904)</h4>
+            <p>Lorentz contraction, Fitzgerald hypothesis, aether drag — <strong>18 years</strong> of complexity to save a flawed foundation.</p>
+            <p class="small muted" style="margin-top:.5rem;">Sound familiar?</p>
+          </div>
+          <div class="contrast-card contrast-card--accent">
+            <h4>The removal (1905)</h4>
+            <div class="portrait portrait--inline">
+              <img src="img/einstein.jpg" alt="Albert Einstein">
+              <span>A. Einstein</span>
+            </div>
+            <p>He didn't fix the aether. He asked: <strong>what if there is no aether?</strong></p>
+            <p class="small" style="margin-top:.5rem;opacity:.7;">Special relativity. From first principles.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · AETHER: THE LESSON -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow">The lesson</span>
+        <h2>When the foundation is wrong,<br>no amount of patching helps</h2>
+        <p class="lead" style="max-width:600px;">The aether was an <strong>unexamined assumption</strong> that became invisible through repetition. Until someone asked:</p>
+        <blockquote class="pull-quote">"What if we just… don't need it?"</blockquote>
+      </div>
+    </section>
+
+    <!-- TRANSFORMER ANATOMY -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow red">The parallel</span>
+          <h2>Deep learning has<br>its own aether</h2>
+          <p>In a Transformer, attention is the one component with a clear mathematical framework for interpretability — we can decompose it into circuits and trace information flow.</p>
+          <p style="margin-top:.6rem;">The MLP block is different. Two linear projections sandwiching an activation function ($\sigma$). The linear parts are interpretable — but $\sigma$ breaks the chain. It has no closed-form inverse, no geometric meaning, no mathematical structure to decompose.</p>
+          <p class="small muted" style="margin-top:.8rem;">And this repeats every layer. The distortion compounds.</p>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-transformer" class="viz viz-xtall"></canvas>
+          <p class="caption">Transformer block — teal = explainable, red = black box</p>
+        </div>
+      </div>
+      <div class="footnote">N. Elhage, N. Nanda, C. Olsson, T. Henighan, N. Joseph, B. Mann, A. Askell, Y. Bai, A. Chen, T. Conerly, N. DasSarma, D. Drain, D. Ganguli, Z. Hatfield-Dodds, D. Hernandez, A. Jones, J. Kernion, L. Lovitt, K. Ndousse, D. Amodei, T. Brown, J. Clark, J. Kaplan, S. McCandlish, C. Olah. <a href="https://transformer-circuits.pub/2021/framework/">"A Mathematical Framework for Transformer Circuits"</a>, Anthropic, 2021.</div>
+    </section>
+
+    <!-- 9 · DEPTH DEGRADATION -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow red">The deeper you go</span>
+          <h2>It only gets worse</h2>
+          <p>Each layer passes through another activation. The distortions <strong>compound</strong>. By layer 64, the original signal is unrecoverable.</p>
+          <div class="pipeline-note" style="margin-top:1.2rem;">
+            <p>Even <strong>Sparse Autoencoders</strong> (SAEs) — the best tool mechanistic interpretability has — explicitly state they cannot mathematically explain what these layers compute.</p>
+            <p class="small muted" style="margin-top:.4rem;">Statistical correlations, not causal structure. <strong>The activations have no mathematical structure to probe.</strong></p>
+          </div>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-depth" class="viz"></canvas>
+          <p class="caption">A clean signal progressively destroyed through ReLU layers</p>
+        </div>
+      </div>
+      <div class="footnote">A. Templeton, T. Conerly, J. Marcus, J. Lindsey, T. Bricken, B. Chen, A. Pearce, C. Citro, E. Ameisen, A. Jones, H. Cunningham, N. L. Turner, C. McDougall, M. MacDiarmid, C. D. Freeman, T. R. Sumers, E. Rees, J. Batson, A. Jermyn, S. Carter, C. Olah, T. Henighan. <a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">"Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet"</a>, Anthropic, 2024.</div>
+    </section>
+
+    <!-- 10 · MANIFOLD DISTORTION -->
+    <section class="slide" data-theme="dark">
+      <div class="content">
+        <span class="eyebrow red">The root cause</span>
+        <h2>Manifold distortion</h2>
+        <p style="max-width:700px;">ReLU maps all negatives to zero. Vectors that were <strong>opposite</strong> (180° apart — maximally different meaning) become <strong>orthogonal</strong> (0° — semantically unrelated). The metric structure of the data manifold is non-recoverable.</p>
+        <div class="viz-wrap" style="margin-top:1.2rem;">
+          <canvas id="viz-manifold" class="viz viz-wide"></canvas>
+          <p class="caption">Left: 20 points on a unit circle — opposite pairs connected. Right: after ReLU — 3 quadrants collapse to axes/origin.</p>
+        </div>
+      </div>
+      <div class="footnote">T. Bouhsine. <a href="https://www.azetta.ai/blogs/meaning-of-non-linearity.html">"The Meaning of Non-Linearity"</a>, Azetta.ai, 2025. &nbsp;|&nbsp; T. Bouhsine. <a href="https://www.azetta.ai/blogs/geometry-of-softmax.html">"The Geometry of Softmax"</a>, Azetta.ai, 2025.</div>
+    </section>
+
+    <!-- INVERSE-SQUARE LAW — bridge from problem to solution -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow green">A clue from nature</span>
+          <h2>The inverse-square law</h2>
+          <p>When physicists removed the aether, what remained were the actual laws. Gravity, electrostatics, radiation — the universe is overwhelmingly governed by one pattern:</p>
+          <div class="math-block hero">$$F \propto \frac{1}{r^2}$$</div>
+          <p>Influence decays with the square of distance. <strong>Locality is the physics</strong> — not a heuristic, a law.</p>
+          <p style="margin-top:.8rem;">What if neural interactions obeyed this same law? What if the denominator of a neural operation encoded <strong>proximity</strong>, not just the numerator encoding alignment?</p>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-gravity" class="viz"></canvas>
+          <p class="caption">Inverse-square potential — masses partition space by proximity, not magnitude</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BACK TO MERCER -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow">The insight</span>
+          <h2>What if we go back to <em>Mercer?</em></h2>
+          <p>In standard neural networks, input and weight spaces are linked by the dot product — a linear, flat metric. But Mercer's theorem (1909) showed there's a richer structure:</p>
+          <div class="math-block hero">$$K(\mathbf{x}, \mathbf{y}) = \langle \varphi(\mathbf{x}),\; \varphi(\mathbf{y}) \rangle_{\mathcal{H}}$$</div>
+          <p class="small muted">Every continuous positive-definite kernel implicitly maps data into a reproducing kernel Hilbert space where geometry — distances, angles, curvature — is <strong>defined by the kernel itself</strong>.</p>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-rkhs" class="viz viz-tall"></canvas>
+          <p class="caption">Input space → kernel map $\varphi$ → RKHS where geometry is meaningful</p>
+        </div>
+      </div>
+      <div class="footnote">J. Mercer. <a href="https://doi.org/10.1098/rsta.1909.0016">"Functions of Positive and Negative Type, and their Connection with the Theory of Integral Equations"</a>, Phil. Trans. Royal Society A, 1909.</div>
+    </section>
+
+    <!-- 12 · THE YAT PRODUCT -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow green">Core contribution</span>
+          <h2>The Yat-Product <span class="tifinagh">ⵟ</span></h2>
+          <div class="math-block hero">$$\mathcal{K}_{\text{ⵟ}}(\mathbf{w},\mathbf{x}) = \frac{(\mathbf{w}^{\top}\mathbf{x})^{2}}{\|\mathbf{w}-\mathbf{x}\|^{2}+\varepsilon}$$</div>
+          <div class="split-cards">
+            <div class="scard">
+              <h4>Numerator — Alignment</h4>
+              <div class="math-block small">$(\mathbf{w}^\top\mathbf{x})^2$</div>
+              <p>Directional agreement.</p>
+            </div>
+            <div class="scard">
+              <h4>Denominator — Proximity</h4>
+              <div class="math-block small">$\|\mathbf{w} - \mathbf{x}\|^2 + \varepsilon$</div>
+              <p>Built-in normalization.</p>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">Mercer kernel</span>
+            <span class="tag">Analytic</span>
+            <span class="tag">Lipschitz</span>
+            <span class="tag">Self-regularizing</span>
+          </div>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-yat-potential" class="viz viz-tall"></canvas>
+          <p class="caption">ⵟ-kernel potential well with level sets — $\mathbf{w}$ fixed at center</p>
+        </div>
+      </div>
+      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu: Physics-Inspired Kernel Networks for Geometrically-Grounded Neural Computation"</a>, arXiv:2603.12276, 2025.</div>
+    </section>
+
+    <!-- 13 · WHERE YAT GOES — architecture comparison -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow green">The replacement</span>
+        <h2>Where does the ⵟ-kernel go?</h2>
+        <p class="lead" style="margin-bottom:1.5rem;">The activation function is the aether. The ⵟ-kernel removes it.</p>
+        <div class="arch-compare">
+          <div class="arch-col">
+            <h4 style="color:var(--red)">Standard MLP</h4>
+            <div class="arch-flow">
+              <div class="af-block af-ok">$\mathbf{x}$</div>
+              <div class="af-arrow">→</div>
+              <div class="af-block af-ok">Linear $\mathbf{W}_1$</div>
+              <div class="af-arrow">→</div>
+              <div class="af-block af-bad">$\sigma$ (ReLU/GELU)</div>
+              <div class="af-arrow">→</div>
+              <div class="af-block af-ok">Linear $\mathbf{W}_2$</div>
+              <div class="af-arrow">→</div>
+              <div class="af-block af-neutral">LayerNorm</div>
+            </div>
+            <p class="small muted" style="margin-top:.6rem;">Activation destroys geometry. Normalization patches the damage.</p>
+          </div>
+          <div class="arch-vs">vs</div>
+          <div class="arch-col">
+            <h4 style="color:var(--teal)">Yat-based (NMN)</h4>
+            <div class="arch-flow">
+              <div class="af-block af-ok">$\mathbf{x}$</div>
+              <div class="af-arrow">→</div>
+              <div class="af-block af-good">ⵟ-kernel $\frac{(\mathbf{w}^\top\mathbf{x})^2}{\|\mathbf{w}-\mathbf{x}\|^2+\varepsilon}$</div>
+              <div class="af-arrow">→</div>
+              <div class="af-block af-ok">Linear $\mathbf{W}_2$</div>
+            </div>
+            <p class="small" style="margin-top:.6rem;color:var(--teal);opacity:.7;">Non-linearity + normalization in one kernel. Geometry preserved. No patches.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu: Physics-Inspired Kernel Networks for Geometrically-Grounded Neural Computation"</a>, arXiv:2603.12276, 2025.</div>
+    </section>
+
+    <!-- WHAT KERNEL THEORY BRINGS -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow green">Beyond interpretability</span>
+        <h2>What kernel theory also brings</h2>
+        <p class="lead" style="margin-bottom:1.5rem;">A principled kernel isn't just about understanding — it unlocks <strong>linear-time approximation</strong>.</p>
+        <div class="split-cards" style="max-width:700px;margin:0 auto;">
+          <div class="scard">
+            <h4>Random Feature Approximation</h4>
+            <div class="math-block small">$K(\mathbf{x},\mathbf{y}) \approx \Psi(\mathbf{x})^\top \Psi(\mathbf{y})$</div>
+            <p>Any shift-invariant kernel can be approximated by finite-dimensional random features (Rahimi & Recht, 2007). This turns $O(n^2)$ kernel operations into $O(n \cdot m)$ — linear in sequence length.</p>
+          </div>
+          <div class="scard">
+            <h4>Bernstein Decomposition</h4>
+            <div class="math-block small">$\text{ⵟ}_{\text{sph}} = \int_0^\infty e^{-sC} x^2 e^{2sx}\,ds$</div>
+            <p>The ⵟ-kernel's complete monotonicity enables exact decomposition via Gauss-Laguerre quadrature — not an approximation, but a <strong>mathematical identity</strong>.</p>
+          </div>
+        </div>
+        <p class="small muted" style="margin-top:1.2rem;">This is how SLAY achieves $O(n)$ attention: the kernel trick, applied rigorously.</p>
+      </div>
+      <div class="footnote">A. Rahimi, B. Recht. <a href="https://papers.nips.cc/paper/2007/hash/013a006f03dbc5392effeb8f18fda755-Abstract.html">"Random Features for Large-Scale Kernel Machines"</a>, NeurIPS, 2007. &nbsp;|&nbsp; J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY"</a>, arXiv:2602.04915, 2025.</div>
+    </section>
+
+    <!-- SLAY -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow green">Applying the kernel to attention</span>
+          <h2>SLAY</h2>
+          <p class="lead">Spherical Linearized Attention with Yat-Kernel</p>
+          <p style="margin-top:.8rem;">Constrain Q, K to the unit sphere. Replace softmax with the ⵟ-kernel. Linearize via Bernstein decomposition.</p>
+          <div class="math-block hero">$$\hat{\mathbf{Y}}=\frac{\Psi({\mathbf{Q}})\left(\Psi({\mathbf{K}})^{\top}\mathbf{V}\right)}{\Psi({\mathbf{Q}})\left(\Psi({\mathbf{K}})^{\top}\mathbf{1}\right)}$$</div>
+          <p><strong>$O(n)$ attention</strong> — interpretable, geometry-aware, linear in sequence length.</p>
+          <a class="paper" href="https://arxiv.org/abs/2602.04915" target="_blank">"SLAY" — arxiv:2602.04915</a>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-sphere" class="viz viz-tall"></canvas>
+          <p class="caption">Query attends to keys via angular ⵟ weight — bar chart shows live distribution</p>
+        </div>
+      </div>
+      <div class="footnote">J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY: Geometry-Aware Spherical Linearized Attention with Yat-Kernel"</a>, arXiv:2602.04915, 2025.</div>
+    </section>
+
+    <!-- THE COST PROBLEM -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow yellow">The reality</span>
+        <h2>You can't compete with big tech<br>on <em>compute</em></h2>
+        <p class="lead" style="max-width:650px;">GPUs are expensive. Random experiments to validate a hypothesis would cost a small nation's GDP. If you're an indie researcher from the outskirts of Morocco, every GPU hour counts.</p>
+        <p style="margin-top:1rem;max-width:600px;">You need to minimize cost. You can't brute-force your way to discovery. Every experiment must be <strong>intentional</strong>.</p>
+      </div>
+    </section>
+
+    <!-- THE CONSTRAINTS -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow yellow">What you need</span>
+        <h2>Constraints shape the approach</h2>
+        <div class="constraint-row">
+          <div class="constraint">
+            <span class="constraint-icon">↻</span>
+            <h4>Reproducibility</h4>
+            <p>You need to know you're not winning the lottery ticket. Full control over randomness, deterministic results, or your experiments mean nothing.</p>
+          </div>
+          <div class="constraint">
+            <span class="constraint-icon">⚙</span>
+            <h4>No CUDA hell</h4>
+            <p>You don't want to spend months writing custom CUDA kernels for the sake of testing a mathematical hypothesis. The tool must match the math.</p>
+          </div>
+          <div class="constraint">
+            <span class="constraint-icon">⚡</span>
+            <h4>Hardware access</h4>
+            <p>You need accelerators you can actually afford. H100 clusters are not an option.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY JAX -->
+    <section class="slide" data-theme="dark">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow green">This is where JAX comes in</span>
+          <h2>JAX & Flax</h2>
+          <p>JAX thinks like a mathematician. Functional transforms that mirror the math — no framework tax, no abstraction gap.</p>
+          <div class="feat-list" style="margin-top:1rem;">
+            <div class="feat"><code>jax.grad</code><span>Autodiff through the ⵟ-kernel — free</span></div>
+            <div class="feat"><code>jax.vmap</code><span>Vectorize kernel computations — no loops</span></div>
+            <div class="feat"><code>jax.jit</code><span>XLA compilation — write Python, run on TPU</span></div>
+            <div class="feat"><code>flax.nnx</code><span>Pythonic modules — white-box code for white-box models</span></div>
+          </div>
+          <p class="small muted" style="margin-top:1rem;">No CUDA kernels. No custom C++. Just math → code → TPU.</p>
+        </div>
+        <div>
+          <div class="code-win" style="margin-bottom:.8rem;">
+            <div class="code-bar">
+              <i class="dot r"></i><i class="dot y"></i><i class="dot g"></i>
+              <span class="code-bar-label" style="color:var(--red);opacity:.5;">standard — linear + activation</span>
+            </div>
+            <pre><code><span class="ck">from</span> flax <span class="ck">import</span> nnx
+
+<span class="cc"># Standard MLP: linear → activation → linear</span>
+x = nnx.Linear(din, hidden)(x)
+x = nnx.gelu(x)            <span class="cc"># ← black box</span>
+x = nnx.Linear(hidden, dout)(x)</code></pre>
+          </div>
+          <div class="code-win">
+            <div class="code-bar">
+              <i class="dot r"></i><i class="dot y"></i><i class="dot g"></i>
+              <span class="code-bar-label" style="color:var(--teal);opacity:.7;">nmn — yat kernel replaces both</span>
+            </div>
+            <pre><code><span class="ck">from</span> nmn.nnx.layers <span class="ck">import</span> <span class="cf">YatNMN</span>
+
+<span class="cc"># NMN: kernel is the non-linearity</span>
+x = <span class="cf">YatNMN</span>(din, dout, rngs=rngs)(x) <span class="cc"># ← interpretable</span>
+x = nnx.Linear(hidden, dout)(x)</code></pre>
+          </div>
+          <p class="small" style="margin-top:.6rem;text-align:center;"><code style="color:var(--teal);font-size:.72rem;">pip install nmn</code> &nbsp;·&nbsp; <a class="paper" href="https://github.com/azettaai/nmn" target="_blank" style="margin:0;">github.com/azettaai/nmn</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE ECOSYSTEM THAT MADE IT POSSIBLE -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow green">The ecosystem</span>
+        <h2>TPUs made this possible</h2>
+        <p class="lead" style="max-width:680px;">An indie researcher can't afford H100 clusters. But Google's ecosystem leveled the playing field.</p>
+        <div class="ecosystem-stack">
+          <div class="eco-item">
+            <h4>Colab & Kaggle TPUs</h4>
+            <p>Free TPU access for prototyping. Test your kernel hypothesis in minutes, not days. Iterate fast, fail cheap.</p>
+          </div>
+          <div class="eco-item">
+            <h4>Google Cloud TPUs</h4>
+            <p>When you need scale — TPU v4 pods for the real experiments. JAX + XLA means your code runs without changes.</p>
+          </div>
+          <div class="eco-item eco-item--highlight">
+            <h4>TRC — TPU Research Cloud</h4>
+            <p>Google's research support program. <strong>2 years of TPU access</strong> that made both papers possible. Without TRC, this research doesn't exist.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROOFS FIRST, EXPERIMENTS SECOND -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow">The hardest part</span>
+        <h2>The proofs, not the experiments</h2>
+        <p class="lead" style="max-width:680px;">The hardest part of this research wasn't compute. It wasn't engineering. It was the months spent at the whiteboard proving the theorems.</p>
+        <div class="contrast-row" style="margin-top:1.5rem;">
+          <div class="contrast-card">
+            <h4>Without proofs</h4>
+            <p>Random experiments. Hoping for a good loss curve. No guarantee your result generalizes. Burning compute on intuition.</p>
+          </div>
+          <div class="contrast-card contrast-card--accent">
+            <h4>With proofs</h4>
+            <p>The theorem tells you <strong>what should work and why</strong>. Experiments become validation, not exploration. Every run is guided by mathematics.</p>
+          </div>
+        </div>
+        <p class="small muted" style="margin-top:1.2rem;max-width:600px;">Once we proved the ⵟ-kernel was a valid Mercer kernel — analytic, Lipschitz, self-regularizing — the experiments followed directly. The math guided us to what to test.</p>
+      </div>
+      <div class="footnote">Proofs in: T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu"</a>, arXiv:2603.12276, 2025 (Theorems 1–4). &nbsp;|&nbsp; J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY"</a>, arXiv:2602.04915, 2025 (Theorems 1–3).</div>
+    </section>
+
+    <!-- VISION -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow green">Physics-Grounded AI Research Lab</span>
+        <h2>Azetta.ai</h2>
+        <p class="lead">Building state-of-the-art AI that is<br><em>interpretable</em>, <em>steerable</em>, and <em>efficient</em></p>
+        <div class="split-cards" style="max-width:680px;margin:1.5rem auto;">
+          <div class="scard">
+            <h4>Interpretable</h4>
+            <p>Glass box, not black box. Monosemantic neurons by design — one neuron, one concept.</p>
+          </div>
+          <div class="scard">
+            <h4>Steerable</h4>
+            <p>Target specific neurons. Correct behavior without retraining the entire model.</p>
+          </div>
+        </div>
+        <div class="split-cards" style="max-width:680px;margin:0 auto;">
+          <div class="scard">
+            <h4>Efficient</h4>
+            <p>Fewer parameters, faster training. The kernel does more with less.</p>
+          </div>
+          <div class="scard">
+            <h4>Open</h4>
+            <p>If AI safety depends on math, the math must be open. All research is public.</p>
+          </div>
+        </div>
+        <p class="small muted" style="margin-top:1.5rem;">AI should be safe, transparent, and sustainable.</p>
+        <a class="paper" href="https://azetta.ai" target="_blank">azetta.ai</a>
+      </div>
+    </section>
+
+    <!-- SPECIAL THANKS -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow green">Special thanks</span>
+        <h2>Google AI Developer Program</h2>
+        <p class="lead" style="max-width:640px;">This research would not have been possible without the support of the Google Developer Expert program, the TPU Research Cloud, and the incredible AI developer community.</p>
+        <div class="community-photo">
+          <img src="img/DSC01725.JPG" alt="Google for Developers AI Community Summit, Bali 2025">
+          <p class="caption">Google for Developers — AI Community Summit, Bali 2025</p>
+        </div>
+        <p class="small muted" style="margin-top:.8rem;">To the GDE community, the TRC team, and everyone who believed in first-principles research from day one — thank you.</p>
+      </div>
+      <div class="footnote">Special thanks to Soonson Kwon, Hee Jung, Nari Yoon, and Bitnoori Keum for all the support.</div>
+    </section>
+
+    <!-- THANK YOU -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <h2 class="big-end">Thank you.</h2>
+        <p class="lead muted">Let's remove the aether from AI.</p>
+        <div class="links">
+          <a href="https://arxiv.org/abs/2603.12276" target="_blank"><span class="lbl">NMN Paper</span>arxiv:2603.12276</a>
+          <a href="https://arxiv.org/abs/2602.04915" target="_blank"><span class="lbl">SLAY Paper</span>arxiv:2602.04915</a>
+          <a href="https://azetta.ai" target="_blank"><span class="lbl">Company</span>azetta.ai</a>
+          <a href="https://tahabouhsine.com" target="_blank"><span class="lbl">Web</span>tahabouhsine.com</a>
+        </div>
+        <span class="eyebrow" style="margin-top:3rem;display:block;">Q & A</span>
+      </div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section class="slide" data-theme="dark">
+      <div class="content">
+        <span class="eyebrow muted">References</span>
+        <h2>Bibliography</h2>
+        <ol class="bib-list">
+          <li>T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu: Physics-Inspired Kernel Networks for Geometrically-Grounded Neural Computation"</a>, arXiv:2603.12276, 2025.</li>
+          <li>J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY: Geometry-Aware Spherical Linearized Attention with Yat-Kernel"</a>, arXiv:2602.04915, 2025.</li>
+          <li>J. Mercer. <a href="https://doi.org/10.1098/rsta.1909.0016">"Functions of Positive and Negative Type, and their Connection with the Theory of Integral Equations"</a>, Phil. Trans. Royal Society A, vol. 209, pp. 415–446, 1909.</li>
+          <li>A. Rahimi, B. Recht. <a href="https://papers.nips.cc/paper/2007/hash/013a006f03dbc5392effeb8f18fda755-Abstract.html">"Random Features for Large-Scale Kernel Machines"</a>, Advances in Neural Information Processing Systems (NeurIPS), 2007.</li>
+          <li>N. Elhage, N. Nanda, C. Olsson, T. Henighan, et al. <a href="https://transformer-circuits.pub/2021/framework/">"A Mathematical Framework for Transformer Circuits"</a>, Anthropic, 2021.</li>
+          <li>A. Templeton, T. Conerly, J. Marcus, J. Lindsey, et al. <a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">"Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet"</a>, Anthropic, 2024.</li>
+          <li>A. A. Michelson, E. W. Morley. <a href="https://doi.org/10.2475/ajs.s3-34.203.333">"On the Relative Motion of the Earth and the Luminiferous Ether"</a>, American Journal of Science, vol. 34, no. 203, pp. 333–345, 1887.</li>
+          <li>T. Bouhsine. <a href="https://www.azetta.ai/blogs/meaning-of-non-linearity.html">"The Meaning of Non-Linearity"</a>, Azetta.ai, 2025.</li>
+          <li>T. Bouhsine. <a href="https://www.azetta.ai/blogs/geometry-of-softmax.html">"The Geometry of Softmax"</a>, Azetta.ai, 2025.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="slides.js"></script>
+  <script src="visualizations.js"></script>
+</body>
+</html>
