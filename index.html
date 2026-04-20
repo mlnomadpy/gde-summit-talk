@@ -13,6 +13,7 @@
 <body>
   <div id="progress"></div>
   <div id="counter"></div>
+  <div id="pace-cue">flash</div>
   <nav id="nav">
     <button id="prev" aria-label="Previous">&larr;</button>
     <button id="next" aria-label="Next">&rarr;</button>
@@ -35,7 +36,7 @@
     </section>
 
     <!-- 2 · ABOUT ME -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content about-slide">
         <div class="about-top">
           <img src="img/taha.jpeg" alt="Taha Bouhsine" class="about-photo">
@@ -101,7 +102,7 @@
     </section>
 
     <!-- 4 · AETHER: THE CRACK -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content col-2">
         <div>
           <span class="eyebrow yellow">1887</span>
@@ -153,7 +154,7 @@
     </section>
 
     <!-- 6 · AETHER: THE LESSON -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content center">
         <span class="eyebrow">The lesson</span>
         <h2>When the foundation is wrong,<br>no amount of patching helps</h2>
@@ -180,8 +181,22 @@
       <div class="footnote">N. Elhage, N. Nanda, C. Olsson, T. Henighan, N. Joseph, B. Mann, A. Askell, Y. Bai, A. Chen, T. Conerly, N. DasSarma, D. Drain, D. Ganguli, Z. Hatfield-Dodds, D. Hernandez, A. Jones, J. Kernion, L. Lovitt, K. Ndousse, D. Amodei, T. Brown, J. Clark, J. Kaplan, S. McCandlish, C. Olah. <a href="https://transformer-circuits.pub/2021/framework/">"A Mathematical Framework for Transformer Circuits"</a>, Anthropic, 2021.</div>
     </section>
 
-    <!-- 9 · DEPTH DEGRADATION -->
+    <!-- MANIFOLD DISTORTION -->
     <section class="slide" data-theme="dark">
+      <div class="content">
+        <span class="eyebrow red">The root cause</span>
+        <h2>Manifold distortion</h2>
+        <p style="max-width:700px;">ReLU maps all negatives to zero. Vectors that were <strong>opposite</strong> (180° apart — maximally different meaning) become <strong>orthogonal</strong> (0° — semantically unrelated). The metric structure of the data manifold is non-recoverable.</p>
+        <div class="viz-wrap" style="margin-top:1.2rem;">
+          <canvas id="viz-manifold" class="viz viz-wide"></canvas>
+          <p class="caption">Left: 20 points on a unit circle — opposite pairs connected. Right: after ReLU — 3 quadrants collapse to axes/origin.</p>
+        </div>
+      </div>
+      <div class="footnote">T. Bouhsine. <a href="https://www.azetta.ai/blogs/meaning-of-non-linearity.html">"The Meaning of Non-Linearity"</a>, Azetta.ai, 2025. &nbsp;|&nbsp; T. Bouhsine. <a href="https://www.azetta.ai/blogs/geometry-of-softmax.html">"The Geometry of Softmax"</a>, Azetta.ai, 2025.</div>
+    </section>
+
+    <!-- DEPTH DEGRADATION -->
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content col-2">
         <div>
           <span class="eyebrow red">The deeper you go</span>
@@ -200,22 +215,8 @@
       <div class="footnote">A. Templeton, T. Conerly, J. Marcus, J. Lindsey, T. Bricken, B. Chen, A. Pearce, C. Citro, E. Ameisen, A. Jones, H. Cunningham, N. L. Turner, C. McDougall, M. MacDiarmid, C. D. Freeman, T. R. Sumers, E. Rees, J. Batson, A. Jermyn, S. Carter, C. Olah, T. Henighan. <a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">"Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet"</a>, Anthropic, 2024.</div>
     </section>
 
-    <!-- 10 · MANIFOLD DISTORTION -->
-    <section class="slide" data-theme="dark">
-      <div class="content">
-        <span class="eyebrow red">The root cause</span>
-        <h2>Manifold distortion</h2>
-        <p style="max-width:700px;">ReLU maps all negatives to zero. Vectors that were <strong>opposite</strong> (180° apart — maximally different meaning) become <strong>orthogonal</strong> (0° — semantically unrelated). The metric structure of the data manifold is non-recoverable.</p>
-        <div class="viz-wrap" style="margin-top:1.2rem;">
-          <canvas id="viz-manifold" class="viz viz-wide"></canvas>
-          <p class="caption">Left: 20 points on a unit circle — opposite pairs connected. Right: after ReLU — 3 quadrants collapse to axes/origin.</p>
-        </div>
-      </div>
-      <div class="footnote">T. Bouhsine. <a href="https://www.azetta.ai/blogs/meaning-of-non-linearity.html">"The Meaning of Non-Linearity"</a>, Azetta.ai, 2025. &nbsp;|&nbsp; T. Bouhsine. <a href="https://www.azetta.ai/blogs/geometry-of-softmax.html">"The Geometry of Softmax"</a>, Azetta.ai, 2025.</div>
-    </section>
-
     <!-- INVERSE-SQUARE LAW — bridge from problem to solution -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content col-2">
         <div>
           <span class="eyebrow green">A clue from nature</span>
@@ -233,7 +234,7 @@
     </section>
 
     <!-- BACK TO MERCER -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content col-2">
         <div>
           <span class="eyebrow">The insight</span>
@@ -256,11 +257,11 @@
         <div>
           <span class="eyebrow green">Core contribution</span>
           <h2>The Yat-Product <span class="tifinagh">ⵟ</span></h2>
-          <div class="math-block hero">$$\mathcal{K}_{\text{ⵟ}}(\mathbf{w},\mathbf{x}) = \frac{(\mathbf{w}^{\top}\mathbf{x})^{2}}{\|\mathbf{w}-\mathbf{x}\|^{2}+\varepsilon}$$</div>
+          <div class="math-block hero">$$\mathcal{K}_{\text{ⵟ}}(\mathbf{w},\mathbf{x}) = \frac{(\mathbf{w}^{\top}\mathbf{x}+b)^{2}}{\|\mathbf{w}-\mathbf{x}\|^{2}+\varepsilon}$$</div>
           <div class="split-cards">
             <div class="scard">
               <h4>Numerator — Alignment</h4>
-              <div class="math-block small">$(\mathbf{w}^\top\mathbf{x})^2$</div>
+              <div class="math-block small">$(\mathbf{w}^\top\mathbf{x}+b)^2$</div>
               <p>Directional agreement.</p>
             </div>
             <div class="scard">
@@ -281,7 +282,7 @@
           <p class="caption">ⵟ-kernel potential well with level sets — $\mathbf{w}$ fixed at center</p>
         </div>
       </div>
-      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu: Physics-Inspired Kernel Networks for Geometrically-Grounded Neural Computation"</a>, arXiv:2603.12276, 2025.</div>
+      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons: Turning the Hidden Layer into an Observable Hilbert Space"</a>, arXiv:2603.12276, 2026.</div>
     </section>
 
     <!-- 13 · WHERE YAT GOES — architecture comparison -->
@@ -312,7 +313,7 @@
             <div class="arch-flow">
               <div class="af-block af-ok">$\mathbf{x}$</div>
               <div class="af-arrow">→</div>
-              <div class="af-block af-good">ⵟ-kernel $\frac{(\mathbf{w}^\top\mathbf{x})^2}{\|\mathbf{w}-\mathbf{x}\|^2+\varepsilon}$</div>
+              <div class="af-block af-good">ⵟ-kernel $\frac{(\mathbf{w}^\top\mathbf{x}+b)^2}{\|\mathbf{w}-\mathbf{x}\|^2+\varepsilon}$</div>
               <div class="af-arrow">→</div>
               <div class="af-block af-ok">Linear $\mathbf{W}_2$</div>
             </div>
@@ -320,7 +321,53 @@
           </div>
         </div>
       </div>
-      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu: Physics-Inspired Kernel Networks for Geometrically-Grounded Neural Computation"</a>, arXiv:2603.12276, 2025.</div>
+      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons: Turning the Hidden Layer into an Observable Hilbert Space"</a>, arXiv:2603.12276, 2026.</div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow green">Does it actually work?</span>
+        <h2>Results</h2>
+        <p class="lead" style="max-width:680px;">The ⵟ-kernel isn't just theoretically elegant — it wins on real benchmarks.</p>
+        <div class="split-cards" style="max-width:720px;margin:1.2rem auto 0;">
+          <div class="scard">
+            <h4>GPT-2 261M · C4 · 5.2B tokens</h4>
+            <div class="math-block small">Wiki PPL: <strong>39.53 (ⵟ)</strong> vs 46.52 (GELU)</div>
+            <p>Beats GELU on <strong>8 of 9</strong> benchmarks. Only 8% throughput hit.</p>
+          </div>
+          <div class="scard">
+            <h4>CLIP / ImageNet probe</h4>
+            <div class="math-block small">74.19% vs 74.20% · <strong>33× wider LR band</strong></div>
+            <p>Matches accuracy, but stable across learning rates where GELU diverges.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footnote">Results from: T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons"</a>, arXiv:2603.12276, 2026.</div>
+    </section>
+
+    <!-- DOES IT SCALE? -->
+    <section class="slide" data-theme="dark">
+      <div class="content center">
+        <span class="eyebrow green">The question everyone asks</span>
+        <h2>But does it <em>scale?</em></h2>
+        <p class="lead" style="max-width:680px;">Small models are cheap to train. The real question is whether the ⵟ-kernel holds up at the scales that matter.</p>
+        <div class="math-block hero">$$\text{1.08B parameters} \;\;\cdot\;\; \Delta\text{loss} = 0.014\;\text{nats}$$</div>
+        <div class="split-cards" style="max-width:720px;margin:1rem auto 0;">
+          <div class="scard">
+            <h4>GELU · 1.08B</h4>
+            <div class="math-block small">train loss: 2.821 nats</div>
+            <p>The standard baseline.</p>
+          </div>
+          <div class="scard">
+            <h4>ⵟ-kernel · 1.08B</h4>
+            <div class="math-block small">train loss: <strong>2.828 (shared) · 2.835 (per-neuron)</strong></div>
+            <p>Within noise of GELU. <strong>The kernel does not fall apart at scale.</strong> It just works.</p>
+          </div>
+        </div>
+        <p class="small muted" style="margin-top:1rem;">No exotic tricks. No instability. Same optimizer, same schedule, same everything — except the kernel.</p>
+      </div>
+      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons: Turning the Hidden Layer into an Observable Hilbert Space"</a>, arXiv:2603.12276, 2026.</div>
     </section>
 
     <!-- WHAT KERNEL THEORY BRINGS -->
@@ -328,29 +375,34 @@
       <div class="content center">
         <span class="eyebrow green">Beyond interpretability</span>
         <h2>What kernel theory also brings</h2>
-        <p class="lead" style="margin-bottom:1.5rem;">A principled kernel isn't just about understanding — it unlocks <strong>linear-time approximation</strong>.</p>
-        <div class="split-cards" style="max-width:700px;margin:0 auto;">
+        <p class="lead" style="max-width:680px;margin-bottom:1.5rem;">Building on a principled kernel unlocks capabilities that are <strong>impossible</strong> with arbitrary activation functions.</p>
+        <div class="split-cards" style="max-width:720px;margin:0 auto;">
           <div class="scard">
-            <h4>Random Feature Approximation</h4>
-            <div class="math-block small">$K(\mathbf{x},\mathbf{y}) \approx \Psi(\mathbf{x})^\top \Psi(\mathbf{y})$</div>
-            <p>Any shift-invariant kernel can be approximated by finite-dimensional random features (Rahimi & Recht, 2007). This turns $O(n^2)$ kernel operations into $O(n \cdot m)$ — linear in sequence length.</p>
+            <h4>Scaling</h4>
+            <p>Random-feature approximation turns $O(n^2)$ kernel operations into $O(n \cdot m)$. Bernstein decomposition gives exact kernel identities.</p>
           </div>
           <div class="scard">
-            <h4>Bernstein Decomposition</h4>
-            <div class="math-block small">$\text{ⵟ}_{\text{sph}} = \int_0^\infty e^{-sC} x^2 e^{2sx}\,ds$</div>
-            <p>The ⵟ-kernel's complete monotonicity enables exact decomposition via Gauss-Laguerre quadrature — not an approximation, but a <strong>mathematical identity</strong>.</p>
+            <h4>Interpretability</h4>
+            <p>Monosemantic neurons by design. Concepts are editable, not probed. RKHS geometry is directly observable.</p>
+          </div>
+          <div class="scard">
+            <h4>Efficiency</h4>
+            <p>Quantization-robust by structure. Compression without accuracy loss. Fewer parameters, faster training.</p>
+          </div>
+          <div class="scard">
+            <h4>Safety</h4>
+            <p>OOD detection for free. Verifiable computation. Mathematical bounds on generalization and complexity.</p>
           </div>
         </div>
-        <p class="small muted" style="margin-top:1.2rem;">This is how SLAY achieves $O(n)$ attention: the kernel trick, applied rigorously.</p>
       </div>
-      <div class="footnote">A. Rahimi, B. Recht. <a href="https://papers.nips.cc/paper/2007/hash/013a006f03dbc5392effeb8f18fda755-Abstract.html">"Random Features for Large-Scale Kernel Machines"</a>, NeurIPS, 2007. &nbsp;|&nbsp; J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY"</a>, arXiv:2602.04915, 2025.</div>
+      <div class="footnote">A. Rahimi, B. Recht. <a href="https://papers.nips.cc/paper/2007/hash/013a006f03dbc5392effeb8f18fda755-Abstract.html">"Random Features for Large-Scale Kernel Machines"</a>, NeurIPS, 2007. &nbsp;|&nbsp; T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons"</a>, arXiv:2603.12276, 2026.</div>
     </section>
 
-    <!-- SLAY -->
+    <!-- SLAY — scaling -->
     <section class="slide" data-theme="dark">
       <div class="content col-2">
         <div>
-          <span class="eyebrow green">Applying the kernel to attention</span>
+          <span class="eyebrow green">Scaling · linear-time attention</span>
           <h2>SLAY</h2>
           <p class="lead">Spherical Linearized Attention with Yat-Kernel</p>
           <p style="margin-top:.8rem;">Constrain Q, K to the unit sphere. Replace softmax with the ⵟ-kernel. Linearize via Bernstein decomposition.</p>
@@ -366,8 +418,108 @@
       <div class="footnote">J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY: Geometry-Aware Spherical Linearized Attention with Yat-Kernel"</a>, arXiv:2602.04915, 2025.</div>
     </section>
 
+    <!-- QUANTIZATION — efficiency -->
+    <section class="slide" data-theme="dark" data-pace="flash">
+      <div class="content center">
+        <span class="eyebrow green">Efficiency · quantization</span>
+        <h2>Quantization<br>without loss</h2>
+        <p class="lead" style="max-width:680px;">In the Yat-kernel, weights appear in both numerator and denominator. When you quantize the weights, the errors <strong>partially cancel</strong>. Standard activations don't have this structure.</p>
+        <div class="split-cards" style="max-width:720px;margin:1.2rem auto 0;">
+          <div class="scard">
+            <h4>GELU — INT8</h4>
+            <div class="math-block small">+10.83 PPL vs FP32</div>
+            <p>Naive round-to-nearest quantization adds substantial perplexity. The activation amplifies rounding errors.</p>
+          </div>
+          <div class="scard">
+            <h4>ⵟ-kernel — INT8</h4>
+            <div class="math-block small"><strong>+5.12 PPL vs FP32</strong> &nbsp;·&nbsp; 42% less degradation</div>
+            <p>Quantization errors cancel through the ratio structure. Yat-INT8 (44.65 PPL) <strong>beats GELU-FP32 (46.52)</strong> at 4× less memory.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons: Turning the Hidden Layer into an Observable Hilbert Space"</a>, arXiv:2603.12276, 2026. &nbsp;|&nbsp; Results on GPT-2 261M trained on C4 (5.2B tokens).</div>
+    </section>
+
+    <!-- CONCEPT EDITING — interpretability -->
+    <section class="slide" data-theme="dark" data-pace="flash">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow green">Interpretability · concept editing</span>
+          <h2>Concept editing</h2>
+          <p>When every neuron maps to a concept, you can <strong>edit the model directly</strong>. No fine-tuning, no retraining — just rewrite the neuron.</p>
+          <p style="margin-top:.8rem;">Want to change how the model handles "geography"? Locate the neuron, adjust its weights, done. Auditable. Reversible. Surgical.</p>
+          <p class="small muted" style="margin-top:.8rem;">Monosemantic neurons by design — not found by probing after the fact, but <strong>built in by the kernel</strong>.</p>
+          <a class="paper" href="https://azetta.ai" target="_blank">azetta.ai — Glass Box demo</a>
+        </div>
+        <div class="viz-wrap">
+          <canvas id="viz-concept-edit" class="viz viz-tall"></canvas>
+          <p class="caption">Inputs → interpretable concept layers → output. Edit any concept without touching the rest.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- OOD DETECTION — safety -->
+    <section class="slide" data-theme="dark" data-pace="flash">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow green">Safety · OOD detection</span>
+          <h2>OOD detection<br>for <em>free</em></h2>
+          <p>The kernel <em>is</em> a distance. The highest kernel activation across prototypes is also a natural confidence score — the farther from any prototype, the lower the score.</p>
+          <div class="math-block hero">$$s(\mathbf{x}) = \max_{j}\; \mathcal{K}_{\text{ⵟ}}(\mathbf{w}_j, \mathbf{x})$$</div>
+          <p class="small muted">Zero extra training. Zero extra heads. One forward pass — and you know if the input is out-of-distribution.</p>
+        </div>
+        <div>
+          <div class="split-cards" style="grid-template-columns:1fr;max-width:none;margin:0;">
+            <div class="scard">
+              <h4>Shifted input (σ = 3)</h4>
+              <div class="math-block small"><strong>AUROC 1.00</strong> &nbsp;·&nbsp; ⵟ-kernel</div>
+              <div class="math-block small">AUROC 0.60 &nbsp;·&nbsp; softmax entropy</div>
+              <p>The kernel score perfectly separates shifted inputs. Softmax entropy barely moves.</p>
+            </div>
+            <div class="scard">
+              <h4>Mild shift (σ = 1)</h4>
+              <div class="math-block small"><strong>AUROC 0.87</strong> &nbsp;·&nbsp; ⵟ-kernel</div>
+              <p>Works at weak shifts too. The kernel sees the geometry — not just the prediction.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footnote">T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons: Turning the Hidden Layer into an Observable Hilbert Space"</a>, arXiv:2603.12276, 2026.</div>
+    </section>
+
+    <!-- SECURITY — trust -->
+    <section class="slide" data-theme="dark" data-pace="flash">
+      <div class="content col-2">
+        <div>
+          <span class="eyebrow red">Trust · a new problem</span>
+          <h2>Interpretability<br>is a security risk</h2>
+          <p>If every neuron maps to a concept, the weights themselves leak information — potentially including training data.</p>
+          <p style="margin-top:.6rem;">A glass box is transparent to <em>everyone</em>. Including people who shouldn't see inside.</p>
+          <p class="small muted" style="margin-top:.8rem;">Interpretability without access control is not safety — it's exposure.</p>
+        </div>
+        <div>
+          <span class="eyebrow green" style="margin-bottom:.8rem;">The solution</span>
+          <h3 style="font-size:1.1rem;margin-bottom:.6rem;">Model Security Protocol</h3>
+          <div class="split-cards" style="grid-template-columns:1fr;max-width:none;margin:0;">
+            <div class="scard">
+              <h4>Cryptographic access control</h4>
+              <p>Define who can query, who can inspect, and who can edit the model. Every access is logged and verifiable.</p>
+            </div>
+            <div class="scard">
+              <h4>Weight encryption</h4>
+              <p>Encrypt the weights at rest. Training data stays in the training environment — not leaked through the parameters.</p>
+            </div>
+            <div class="scard">
+              <h4>Verifiable inference</h4>
+              <p>Users can verify the model ran correctly without revealing its weights. Zero-knowledge glass box.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- THE COST PROBLEM -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content center">
         <span class="eyebrow yellow">The reality</span>
         <h2>You can't compete with big tech<br>on <em>compute</em></h2>
@@ -377,7 +529,7 @@
     </section>
 
     <!-- THE CONSTRAINTS -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content center">
         <span class="eyebrow yellow">What you need</span>
         <h2>Constraints shape the approach</h2>
@@ -402,7 +554,7 @@
     </section>
 
     <!-- WHY JAX -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content col-2">
         <div>
           <span class="eyebrow green">This is where JAX comes in</span>
@@ -412,9 +564,10 @@
             <div class="feat"><code>jax.grad</code><span>Autodiff through the ⵟ-kernel — free</span></div>
             <div class="feat"><code>jax.vmap</code><span>Vectorize kernel computations — no loops</span></div>
             <div class="feat"><code>jax.jit</code><span>XLA compilation — write Python, run on TPU</span></div>
+            <div class="feat"><code>jax.pallas</code><span>Custom fused ⵟ-kernels when XLA isn't enough</span></div>
             <div class="feat"><code>flax.nnx</code><span>Pythonic modules — white-box code for white-box models</span></div>
           </div>
-          <p class="small muted" style="margin-top:1rem;">No CUDA kernels. No custom C++. Just math → code → TPU.</p>
+          <p class="small muted" style="margin-top:1rem;">No CUDA kernels. No custom C++. When we need hand-tuned speed, <strong>Pallas</strong> writes TPU/GPU kernels in pure Python. Just math → code → TPU.</p>
         </div>
         <div>
           <div class="code-win" style="margin-bottom:.8rem;">
@@ -446,7 +599,7 @@ x = nnx.Linear(hidden, dout)(x)</code></pre>
     </section>
 
     <!-- THE ECOSYSTEM THAT MADE IT POSSIBLE -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content center">
         <span class="eyebrow green">The ecosystem</span>
         <h2>TPUs made this possible</h2>
@@ -473,7 +626,7 @@ x = nnx.Linear(hidden, dout)(x)</code></pre>
     </section>
 
     <!-- PROOFS FIRST, EXPERIMENTS SECOND -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content center">
         <span class="eyebrow">The hardest part</span>
         <h2>The proofs, not the experiments</h2>
@@ -490,13 +643,13 @@ x = nnx.Linear(hidden, dout)(x)</code></pre>
         </div>
         <p class="small muted" style="margin-top:1.2rem;max-width:600px;">Once we proved the ⵟ-kernel was a valid Mercer kernel — analytic, Lipschitz, self-regularizing — the experiments followed directly. The math guided us to what to test.</p>
       </div>
-      <div class="footnote">Proofs in: T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu"</a>, arXiv:2603.12276, 2025 (Theorems 1–4). &nbsp;|&nbsp; J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY"</a>, arXiv:2602.04915, 2025 (Theorems 1–3).</div>
+      <div class="footnote">Proofs in: T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons"</a>, arXiv:2603.12276, 2026 (Theorems 1–5). &nbsp;|&nbsp; J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY"</a>, arXiv:2602.04915, 2025 (Theorems 1–3).</div>
     </section>
 
     <!-- VISION -->
     <section class="slide" data-theme="dark">
       <div class="content center">
-        <span class="eyebrow green">Physics-Grounded AI Research Lab</span>
+        <span class="eyebrow green">AI Interpretability-first startup</span>
         <h2>Azetta.ai</h2>
         <p class="lead">Building state-of-the-art AI that is<br><em>interpretable</em>, <em>steerable</em>, and <em>efficient</em></p>
         <div class="split-cards" style="max-width:680px;margin:1.5rem auto;">
@@ -524,8 +677,49 @@ x = nnx.Linear(hidden, dout)(x)</code></pre>
       </div>
     </section>
 
+    <!-- THE ASK -->
+    <section class="slide" data-theme="dark" data-pace="flash">
+      <div class="content center">
+        <span class="eyebrow amber">The ask</span>
+        <h2>Let's build interpretable AI <em>together</em></h2>
+        <div class="tier-list">
+          <div class="tier tier-1">
+            <div class="tier-head">
+              <span class="tier-num">1</span>
+              <div>
+                <h4>Try it</h4>
+                <p class="tier-tag">developers · researchers</p>
+              </div>
+            </div>
+            <p><code>pip install nmn</code>. Swap one activation in your next experiment. Tell us what happens.</p>
+          </div>
+          <div class="tier tier-2">
+            <div class="tier-head">
+              <span class="tier-num">2</span>
+              <div>
+                <h4>Partner with us</h4>
+                <p class="tier-tag">design partners · research collaborators</p>
+              </div>
+            </div>
+            <p>Production ML teams in regulated industries — deploy ⵟ in a real pipeline with direct support. Academic labs — co-author, co-publish, stress-test the math on your domain.</p>
+          </div>
+          <div class="tier tier-3">
+            <div class="tier-head">
+              <span class="tier-num">3</span>
+              <div>
+                <h4>Build with us</h4>
+                <p class="tier-tag">strategic partners · investors</p>
+              </div>
+            </div>
+            <p>Organizations that need interpretable AI as infrastructure — joint roadmap, preferential access, custom work. And we're raising.</p>
+          </div>
+        </div>
+        <p class="tier-contact"><a href="mailto:taha@azetta.ai">taha@azetta.ai</a></p>
+      </div>
+    </section>
+
     <!-- SPECIAL THANKS -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content center">
         <span class="eyebrow green">Special thanks</span>
         <h2>Google AI Developer Program</h2>
@@ -555,12 +749,12 @@ x = nnx.Linear(hidden, dout)(x)</code></pre>
     </section>
 
     <!-- REFERENCES -->
-    <section class="slide" data-theme="dark">
+    <section class="slide" data-theme="dark" data-pace="flash">
       <div class="content">
         <span class="eyebrow muted">References</span>
         <h2>Bibliography</h2>
         <ol class="bib-list">
-          <li>T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"No More DeLuLu: Physics-Inspired Kernel Networks for Geometrically-Grounded Neural Computation"</a>, arXiv:2603.12276, 2025.</li>
+          <li>T. Bouhsine. <a href="https://arxiv.org/abs/2603.12276">"Kernel Neurons: Turning the Hidden Layer into an Observable Hilbert Space"</a>, arXiv:2603.12276, 2026.</li>
           <li>J. M. Luna, T. Bouhsine, K. Choromanski. <a href="https://arxiv.org/abs/2602.04915">"SLAY: Geometry-Aware Spherical Linearized Attention with Yat-Kernel"</a>, arXiv:2602.04915, 2025.</li>
           <li>J. Mercer. <a href="https://doi.org/10.1098/rsta.1909.0016">"Functions of Positive and Negative Type, and their Connection with the Theory of Integral Equations"</a>, Phil. Trans. Royal Society A, vol. 209, pp. 415–446, 1909.</li>
           <li>A. Rahimi, B. Recht. <a href="https://papers.nips.cc/paper/2007/hash/013a006f03dbc5392effeb8f18fda755-Abstract.html">"Random Features for Large-Scale Kernel Machines"</a>, Advances in Neural Information Processing Systems (NeurIPS), 2007.</li>

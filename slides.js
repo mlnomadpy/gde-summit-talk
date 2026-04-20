@@ -34,7 +34,10 @@
   function update() {
     bar.style.width = ((cur + 1) / total * 100) + '%';
     ctr.textContent = (cur + 1) + '/' + total;
-    document.body.className = slides[cur].dataset.theme === 'light' ? 'light' : '';
+    const classes = [];
+    if (slides[cur].dataset.theme === 'light') classes.push('light');
+    if (slides[cur].dataset.pace === 'flash') classes.push('flash-active');
+    document.body.className = classes.join(' ');
     history.replaceState(null, '', '#' + (cur + 1));
   }
 

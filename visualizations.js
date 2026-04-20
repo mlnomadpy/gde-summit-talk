@@ -1651,6 +1651,152 @@ const Viz = (() => {
   }
 
   // ══════════════════════════════════════════════════════════════
+  // CONCEPT EDITING DIAGRAM — glass-box network.
+  //   Input tokens → 3 concept layers (named neurons) → output.
+  //   One highlighted neuron shows the "edit" indicator.
+  //   Animated signal pulses along active edges.
+  // ══════════════════════════════════════════════════════════════
+  function conceptEditing(canvas) {
+    const { ctx, w, h } = setup(canvas);
+    let t = 0;
+
+    // 4 columns: inputs, layer1, layer2, output
+    const pad = { l: 50, r: 30, t: 30, b: 28 };
+    const cols = [
+      { label: 'Input',        nodes: ['The', 'capital', 'of', 'France'], color: 'rgba(255,255,255,0.25)' },
+      { label: 'Layer 1',      nodes: ['Question', 'Geography', 'Named', 'Country'],         color: TEAL },
+      { label: 'Layer 2',      nodes: ['Capital City', 'Location', 'Europe', 'Nation'],      color: AMBER },
+      { label: 'Output',       nodes: ['Paris'],                                              color: TEAL },
+    ];
+    const nCols = cols.length;
+    const colX = i => pad.l + (i / (nCols - 1)) * (w - pad.l - pad.r);
+
+    function nodeY(colIdx, nodeIdx) {
+      const n = cols[colIdx].nodes.length;
+      const usable = h - pad.t - pad.b;
+      if (n === 1) return pad.t + usable / 2;
+      const step = usable / (n - 1);
+      return pad.t + nodeIdx * step;
+    }
+
+    // The "edited" neuron — layer 2 index 0 (Capital City)
+    const editedCol = 2, editedNode = 0;
+    // Signal path: highlight the route to Paris
+    // inputs: all 4 → layer1[0,1,3] → layer2[0,1] → output[0]
+    const activePath = {
+      in_l1: [[0,0],[1,1],[1,3],[2,0],[2,1],[3,3]],
+      l1_l2: [[0,0],[1,0],[1,2],[3,3]],
+      l2_out: [[0,0],[1,0]],
+    };
+
+    function isActive(edgeList, a, b) {
+      return edgeList.some(([x,y]) => x === a && y === b);
+    }
+
+    function frame() {
+      if (!canvas.closest('.slide.active')) { requestAnimationFrame(frame); return; }
+      t += 0.012;
+      ctx.clearRect(0, 0, w, h);
+
+      // ── Edges (input → L1 → L2 → out) ──
+      for (let c = 0; c < nCols - 1; c++) {
+        const next = c + 1;
+        const active = c === 0 ? activePath.in_l1 : c === 1 ? activePath.l1_l2 : activePath.l2_out;
+        for (let a = 0; a < cols[c].nodes.length; a++) {
+          for (let b = 0; b < cols[next].nodes.length; b++) {
+            const isOn = isActive(active, a, b);
+            const x1 = colX(c) + 8, y1 = nodeY(c, a);
+            const x2 = colX(next) - 8, y2 = nodeY(next, b);
+            ctx.beginPath();
+            ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+            ctx.strokeStyle = isOn ? TEAL : 'rgba(255,255,255,0.04)';
+            ctx.globalAlpha = isOn ? 0.5 : 1;
+            ctx.lineWidth = isOn ? 1 : 0.5;
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+
+            // Animated signal pulse on active edges
+            if (isOn) {
+              const phase = ((t * 0.7) + a * 0.1 + b * 0.15) % 1;
+              const px = x1 + (x2 - x1) * phase;
+              const py = y1 + (y2 - y1) * phase;
+              ctx.beginPath();
+              ctx.arc(px, py, 1.8, 0, TAU);
+              ctx.fillStyle = TEAL;
+              ctx.globalAlpha = 0.8;
+              ctx.fill();
+              ctx.globalAlpha = 1;
+            }
+          }
+        }
+      }
+
+      // ── Nodes ──
+      cols.forEach((col, c) => {
+        // Column label
+        ctx.font = '600 8px "IBM Plex Mono", monospace';
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.textAlign = 'center';
+        ctx.fillText(col.label.toUpperCase(), colX(c), pad.t - 12);
+
+        col.nodes.forEach((node, n) => {
+          const x = colX(c), y = nodeY(c, n);
+          const isEdited = c === editedCol && n === editedNode;
+          const isOutput = c === nCols - 1;
+
+          // Highlighted/edited glow
+          if (isEdited) {
+            const pulse = 8 + Math.sin(t * 3) * 2;
+            const g = ctx.createRadialGradient(x, y, 0, x, y, 22 + pulse);
+            g.addColorStop(0, 'rgba(232,160,42,0.35)');
+            g.addColorStop(1, 'transparent');
+            ctx.fillStyle = g;
+            ctx.fillRect(x - 30, y - 30, 60, 60);
+          }
+
+          // Node circle
+          const r = isOutput ? 8 : 6;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, TAU);
+          ctx.fillStyle = isEdited ? AMBER : (c === 0 ? 'rgba(255,255,255,0.08)' : 'rgba(120,196,164,0.08)');
+          ctx.fill();
+          ctx.strokeStyle = isEdited ? AMBER : col.color;
+          ctx.lineWidth = isEdited ? 1.5 : 1;
+          ctx.stroke();
+
+          // Label
+          ctx.font = c === 0 || isOutput
+            ? '500 9px "IBM Plex Mono", monospace'
+            : '400 8px "IBM Plex Mono", monospace';
+          ctx.fillStyle = isEdited ? AMBER : (c === 0 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.4)');
+          ctx.textAlign = c === 0 ? 'right' : isOutput ? 'left' : 'center';
+          const tx = c === 0 ? x - 12 : isOutput ? x + 14 : x;
+          const ty = c === 0 || isOutput ? y + 3 : y - 10;
+          ctx.fillText(node, tx, ty);
+        });
+      });
+
+      // ── "EDIT" indicator pointing to the highlighted neuron ──
+      const ex = colX(editedCol), ey = nodeY(editedCol, editedNode);
+      ctx.font = '600 8px "IBM Plex Mono", monospace';
+      ctx.fillStyle = AMBER;
+      ctx.globalAlpha = 0.5 + Math.sin(t * 3) * 0.25;
+      ctx.textAlign = 'center';
+      ctx.fillText('✎ EDIT', ex, ey + 22);
+      ctx.globalAlpha = 1;
+
+      // ── Bottom label ──
+      ctx.font = '500 8px "IBM Plex Mono", monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.textAlign = 'left';
+      ctx.fillText('GLASS BOX — every neuron is a concept', 8, h - 8);
+
+      requestAnimationFrame(frame);
+    }
+    frame();
+  }
+
+  // ══════════════════════════════════════════════════════════════
   // PUBLIC API
   // ══════════════════════════════════════════════════════════════
   return {
@@ -1666,6 +1812,7 @@ const Viz = (() => {
     transformerBlock,
     rkhsViz,
     yatPotential,
+    conceptEditing,
   };
 })();
 
@@ -1681,6 +1828,7 @@ window.addEventListener('load', () => {
   init('#viz-regulation', Viz.selfRegulation);
   init('#viz-sphere', Viz.sphericalAttention);
   init('#viz-transformer', Viz.transformerBlock);
+  init('#viz-concept-edit', Viz.conceptEditing);
 
   // Static canvases (draw once)
   init('#viz-mm-result', Viz.mmResult);
